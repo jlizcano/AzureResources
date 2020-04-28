@@ -23,7 +23,7 @@
       "type": "Microsoft.KeyVault/vaults",
       "name": "[variables('keyVaultName')]",
       "location": "[parameters('location')]",
-      "apiVersion": "2018-02-14",
+      "apiVersion": "2016-10-01",
       "properties": {
         "enabledForDeployment": true,
         "enabledForTemplateDeployment": true,
@@ -34,41 +34,24 @@
             "tenantId": "[parameters('tenantId')]",
             "permissions": {
               "keys": [
-                "Get",
-                "List",
-                "Update",
-                "Create",
-                "Import",
-                "Delete",
-                "Recover",
-                "Backup",
-                "Restore"
+                "get",
+                "list",
+                "update",
+                "create",
+                "import",
+                "delete",
+                "recover",
+                "backup",
+                "restore"
               ],
               "secrets": [
-                "Get",
-                "List",
-                "Set",
-                "Delete",
-                "Recover",
-                "Backup",
-                "Restore"
-              ],
-              "certificates": [
-                "Get",
-                "List",
-                "Update",
-                "Create",
-                "Import",
-                "Delete",
-                "Recover",
-                "Backup",
-                "Restore",
-                "ManageContacts",
-                "ManageIssuers",
-                "GetIssuers",
-                "ListIssuers",
-                "SetIssuers",
-                "DeleteIssuers"
+                "get",
+                "list",
+                "set",
+                "delete",
+                "recover",
+                "backup",
+                "restore"
               ]
             }
           }
@@ -118,7 +101,7 @@
   "outputs": {
     "keyVaultId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.KeyVault/vaults', variables()('keyVaultName'))]"
+      "value": "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
     }
   }
 }
