@@ -19,7 +19,7 @@
     },
     "adUserId": {
       "type": "string",
-      "defaultValue": "test"
+      "defaultValue": "1bdcd495-bb99-4928-9d30-117ea3dda2f9"
     }
   },
   "variables": {
@@ -40,6 +40,17 @@
             "objectId": "[parameters('adUserId')]",
             "tenantId": "[parameters('tenantId')]",
             "permissions": {
+              "keys": [
+                "Get",
+                "List",
+                "Update",
+                "Create",
+                "Import",
+                "Delete",
+                "Recover",
+                "Backup",
+                "Restore"
+              ],
               "secrets": [
                 "Get",
                 "List",
@@ -48,6 +59,23 @@
                 "Recover",
                 "Backup",
                 "Restore"
+              ],
+              "certificates": [
+                "Get",
+                "List",
+                "Update",
+                "Create",
+                "Import",
+                "Delete",
+                "Recover",
+                "Backup",
+                "Restore",
+                "ManageContacts",
+                "ManageIssuers",
+                "GetIssuers",
+                "ListIssuers",
+                "SetIssuers",
+                "DeleteIssuers"
               ]
             }
           }
