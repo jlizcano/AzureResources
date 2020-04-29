@@ -40,25 +40,14 @@
             "objectId": "[parameters('adUserId')]",
             "tenantId": "[parameters('tenantId')]",
             "permissions": {
-              "keys": [
-                "get",
-                "list",
-                "update",
-                "create",
-                "import",
-                "delete",
-                "recover",
-                "backup",
-                "restore"
-              ],
               "secrets": [
-                "get",
-                "list",
-                "set",
-                "delete",
-                "recover",
-                "backup",
-                "restore"
+                "Get",
+                "List",
+                "Set",
+                "Delete",
+                "Recover",
+                "Backup",
+                "Restore"
               ]
             }
           }
