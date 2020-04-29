@@ -82,12 +82,13 @@
   },
   "variables": {
     "keyvaultName": "[concat('keyvault','-',uniqueString(resourceGroup().id))]",
-    "virtualNetworkName": "[concat('vnet-',uniquestring(resourceGroup().id))]",
+    "vnetName": "[concat('vnet-',uniquestring(resourceGroup().id))]",
+    "vmName": "[concat('vm-',parameters('vmNameSuffix'),uniquestring(resourceGroup().id))]",
     "dnsLabelPrefix": "[concat('dns-',parameters('vmNameSuffix'),'-',uniquestring(resourceGroup().id))]",
     "imagePublisher": "Canonical",
     "imageOffer": "UbuntuServer",
-    "nicName": "[concat('nic-',parameters('vmNameSuffix'),'-',uniquestring(resourceGroup().id))]",
-
+    "nicName": "[concat('nic-int-',variables('vmName'),'-',uniquestring(resourceGroup().id))]",
+    "pipName": "[concat('nic-pip-',variables('vmName'),'-',uniquestring(resourceGroup().id))]",
     "NSGName": "[concat('nsg-',uniquestring(resourceGroup().id))]",
     "addressPrefix": "10.192.168.0/26",
     "subnetName": "default",
@@ -99,9 +100,7 @@
     "vmOSDiskName": "[concat('osdisk-',variables('vmName'),'-')]",
     "vmDataDiskName": "[concat('datadisk-',variables('vmName'),'-')]",
     "publicIPAddressType": "Dynamic",
-    "vmName": "[concat('vm-',parameters('vmNameSuffix'))]",
-
-    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
+    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]"
   },
   "resources": [
     {
@@ -200,7 +199,7 @@
       }
     },
     {
-      "apiVersion": "2016-03-30",
+      "apiVersion": "2019-02-01",
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[variables('NSGName')]",
       "location": "[parameters('location')]",
@@ -235,6 +234,36 @@
             }
           }
         ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2018-10-01",
+      "name": "[variables('nicName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('NSGName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnetName'))]",
+        "[resourceId('Microsoft.Network/publicIpAddresses/', variables('pipName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+            {
+              "name": "ipconfig1",
+              "properties": {
+                  "subnet": {
+                      "id": "[variables('subnetRef')]"
+                  },
+                  "privateIPAllocationMethod": "Dynamic",
+                  "publicIpAddress": {
+                      "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('pipName'))]"
+                  }
+              }
+            }
+        ],
+        "networkSecurityGroup": {
+            "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('NSGName'))]"
+        }
       }
     }
   ],
