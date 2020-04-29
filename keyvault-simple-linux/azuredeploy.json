@@ -90,9 +90,9 @@
     "nicName": "[concat('nic-int-',variables('vmName'),'-',uniquestring(resourceGroup().id))]",
     "pipName": "[concat('nic-pip-',variables('vmName'),'-',uniquestring(resourceGroup().id))]",
     "NSGName": "[concat('nsg-',uniquestring(resourceGroup().id))]",
-    "addressPrefix": "10.192.168.0/26",
     "subnetName": "default",
-    "subnetPrefix": "10.192.168.0/26",
+    "addressPrefix": "10.192.168.0/24",
+    "subnetAddressPrefix": "10.192.168.0/26",
     "vmOSstorageAccountName": "[concat('osdisk',uniquestring(resourceGroup().id))]",
     "vmDatastorageAccountName": "[concat('datadisk',uniquestring(resourceGroup().id))]",
     "vmStorageAccountType": "Standard_LRS",
@@ -265,6 +265,47 @@
             "id": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('NSGName'))]"
         }
       }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('vnetName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('addressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+              "name": "[variables('subnetName')]",
+              "properties": {
+                  "addressPrefix": "[variables('subnetAddressPrefix')]",
+                  "privateEndpointNetworkPolicies": "Enabled",
+                  "privateLinkServiceNetworkPolicies": "Enabled"
+              }
+          }
+        ]
+      }
+    },
+    {
+        "type": "Microsoft.Network/publicIpAddresses",
+        "apiVersion": "2019-02-01",
+        "name": "[variables('pipName')]",
+        "location": "[parameters('location')]",
+        "properties": {
+            "publicIpAllocationMethod": "Dynamic",
+            "publicIPAddressVersion": "IPv4",
+            "dnsSettings": {
+                "domainNameLabel": "[variables('dnsLabelPrefix')]"
+            },
+            "idleTimeoutInMinutes": 4
+        },
+        "sku": {
+            "name": "Basic",
+            "tier": "Regional"
+        }
     }
   ],
   "outputs": {
