@@ -60,17 +60,26 @@
           "description": "Name of the Network Security Group"
       }
     },
+    "adminUsername": {
+      "type": "string",
+      "defaultValue": "jlizcano",
+      "metadata": {
+        "description": "User name for the Virtual Machine."
+      }
+    },
     "location": {
       "type": "string",
-      "defaultValue": "[resourceGroup().location]"
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {"description":"Location for all resources."}
     },
     "tenantId": {
       "type": "string",
-      "defaultValue": "[subscription().tenantId]"
+      "defaultValue": "[subscription().tenantId]",
+      "metadata": {"description":"TenantId for keyvault access policies."}
     },
     "adUserId": {
       "type": "string",
-      "defaultValue": "1bdcd495-bb99-4928-9d30-117ea3dda2f9"
+      "defaultValue": null
     }
   },
   "variables": {
@@ -149,7 +158,7 @@
       ],
       "properties": {
         "contentType": "string",
-        "value": "jlizcano",
+        "value": "[parameters('adminUsername')]",
         "attributes": {
           "enabled": true
         }
