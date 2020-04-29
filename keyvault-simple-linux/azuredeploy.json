@@ -2,11 +2,62 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "resourcegroup": {
+    "vmName": {
       "type": "string",
-      "defaultValue": "TestRG",
+      "defaultValue": "simpleLinuxVM",
       "metadata": {
-        "description": "Resource group para el despliegue de los componentes. Debe estar previamente creado"
+          "description": "The name of you Virtual Machine."
+      }
+    },
+    "dnsLabelPrefix": {
+      "type": "string",
+      "defaultValue": "[toLower(concat(parameters('vmName'),'-', uniqueString(resourceGroup().id)))]",
+      "metadata": {
+          "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
+      }
+    },
+    "ubuntuOSVersion": {
+      "type": "string",
+      "defaultValue": "18.04-LTS",
+      "allowedValues": [
+          "16.04.0-LTS",
+          "18.04-LTS"
+      ],
+      "metadata": {
+          "description": "The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version."
+      }
+    },
+    "VmSize": {
+      "type": "string",
+      "defaultValue": "Standard_B2s",
+      "allowedValues": [
+          "Standard_B1s",
+          "Standard_B4ms",
+          "Standard_D3_v2"
+      ],
+      "metadata": {
+          "description": "The size of the VM"
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "vNet",
+      "metadata": {
+          "description": "Name of the VNET"
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "defaultValue": "Subnet",
+      "metadata": {
+          "description": "Name of the subnet in the virtual network"
+      }
+    },
+    "networkSecurityGroupName": {
+      "type": "string",
+      "defaultValue": "SecGroupNet",
+      "metadata": {
+          "description": "Name of the Network Security Group"
       }
     },
     "location": {
