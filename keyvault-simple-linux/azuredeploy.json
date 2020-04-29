@@ -108,7 +108,7 @@
         "id:": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.KeyVault/vaults/',variables('keyvaultName'))]"
         //"id": "/subscriptions/<SubscriptionID>/resourceGroups/mykeyvaultdeploymentrg/providers/Microsoft.KeyVault/vaults/<KeyVaultName>"
         },
-        "secretName": "vmAdminPassword"
+        "secretName": "adminPasswd"
       }
     }
   },
