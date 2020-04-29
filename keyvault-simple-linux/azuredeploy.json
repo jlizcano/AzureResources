@@ -100,7 +100,17 @@
     "vmOSDiskName": "[concat('osdisk-',variables('vmName'),'-')]",
     "vmDataDiskName": "[concat('datadisk-',variables('vmName'),'-')]",
     "publicIPAddressType": "Dynamic",
-    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]"
+    "osDiskType": "Standard_LRS",
+    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]",
+    "passwd": {
+      "reference": {
+        "keyVault": {
+        "id:": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.KeyVault/vaults/',variables('keyvaultName'))]"
+        //"id": "/subscriptions/<SubscriptionID>/resourceGroups/mykeyvaultdeploymentrg/providers/Microsoft.KeyVault/vaults/<KeyVaultName>"
+        },
+        "secretName": "vmAdminPassword"
+      }
+    }
   },
   "resources": [
     {
@@ -306,6 +316,63 @@
             "name": "Basic",
             "tier": "Regional"
         }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2019-03-01",
+      "name": "[variables('vmName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('VmSize')]"
+        },
+        "storageProfile": {
+          "osDisk": {
+            "createOption": "fromImage",
+            "managedDisk": {
+              "storageAccountType": "[variables('osDiskType')]"
+            }
+          },
+          "imageReference": {
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[parameters('ubuntuOSVersion')]",
+            "version": "latest"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+            }
+          ]
+        },
+        "osProfile": {
+          "computerName": "[variables('vmName')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[variables('passwd')]"
+          //"linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2015-06-15",
+      "name": "[concat(variables('vmName'),'/CustomScript')]",
+      "dependsOn": ["[resourceId('Microsoft.Compute/virtualMachines/', variables('vmName'))]"],
+      "location": "[parameters('location')]",
+      "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": true,
+        "protectedSettings": {
+          "commandToExecute": "[parameters('commandToExecute')]"
+        }
+      }
     }
   ],
   "outputs": {
