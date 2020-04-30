@@ -79,7 +79,7 @@
       "type": "string",
       "defaultValue": null
     },
-    "adminPassword": {
+    "adminPasswd": {
       "type": "securestring"
     }
   },
@@ -187,7 +187,7 @@
     },
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
-      "name": "[concat(variables('keyVaultName'), '/', 'adminPasswd')]",
+      "name": "[concat(variables('keyVaultName'), '/adminPasswd')]",
       "apiVersion": "2016-10-01",
       "location": "[parameters('location')]",
       "scale": null,
@@ -196,7 +196,7 @@
       ],
       "properties": {
         "contentType": "securestring",
-        "value": "[base64(uniqueString(resourceGroup().id))]",
+        "value": "[parameters('adminPasswd')]",
         "attributes": {
           "enabled": true
         }
@@ -318,7 +318,7 @@
       "location": "[parameters('location')]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]",
-        "[resourceId('Microsoft.KeyVault/vaults/secrets/', concat(variables('keyVaultName')))]"
+        "[resourceId('Microsoft.KeyVault/vaults/', concat(variables('keyVaultName')))]"
       ],
       "properties": {
         "hardwareProfile": {
@@ -348,7 +348,7 @@
         "osProfile": {
           "computerName": "[variables('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
+          "adminPassword": "[parameters('adminPasswd')]"
           //"linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
         }
       }
