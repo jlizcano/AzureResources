@@ -5,14 +5,14 @@
       "adminUsername":  {
          "value":  "jlizcano"
       },
-      "adminPassword":  {
-      "reference":  {
-         "keyVault":  {
-            "id:": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.KeyVault/vaults/',variables('keyvaultName'))]"
-         },
-         "secretName":  "adminPasswd"
-      }
-      },
+      //"adminPassword":  {
+      //"reference":  {
+      //   "keyVault":  {
+      //      "id:": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.KeyVault/vaults/',variables('keyvaultName'))]"
+      //   },
+      //   "secretName":  "adminPasswd"
+      //}
+      //},
       "adUserId":  {
          "value":  "1bdcd495-bb99-4928-9d30-117ea3dda2f9"
       }
