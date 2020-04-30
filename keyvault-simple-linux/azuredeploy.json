@@ -80,12 +80,7 @@
       "defaultValue": null
     },
     "adminPassword": {
-      "reference": {
-          "keyVault": {
-          "id:": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.KeyVault/vaults/',variables('keyvaultName'))]"
-          },
-          "secretName": "vmAdminPassword"
-      }
+      "type": "securestring"
     }
   },
   "variables": {
@@ -109,16 +104,7 @@
     "vmDataDiskName": "[concat('datadisk-',variables('vmName'),'-')]",
     "publicIPAddressType": "Dynamic",
     "osDiskType": "Standard_LRS",
-    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]",
-    "passwd": {
-      "reference": {
-        "keyVault": {
-        "id:": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.KeyVault/vaults/',variables('keyvaultName'))]"
-        //"id": "/subscriptions/<SubscriptionID>/resourceGroups/mykeyvaultdeploymentrg/providers/Microsoft.KeyVault/vaults/<KeyVaultName>"
-        },
-        "secretName": "adminPasswd"
-      }
-    }
+    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]"
   },
   "resources": [
     {
