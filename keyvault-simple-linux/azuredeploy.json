@@ -11,10 +11,11 @@
     },
     "ubuntuOSVersion": {
       "type": "string",
-      "defaultValue": "18.04-LTS",
+      "defaultValue": "latest",
       "allowedValues": [
           "16.04.0-LTS",
-          "18.04-LTS"
+          "18.04-LTS",
+          "latest"
       ],
       "metadata": {
           "description": "The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version."
@@ -33,25 +34,26 @@
           "description": "The size of the VM"
       }
     },
-    "virtualNetworkName": {
+    "imageOffer": {
       "type": "string",
-      "defaultValue": "vNet",
+      "defaultValue": "UbuntuServer",
+      "allowedValues": [
+          "CentOS",
+          "UbuntuServer"
+      ],
       "metadata": {
-          "description": "Name of the VNET"
+          "description": "The size of the VM"
       }
     },
-    "subnetName": {
+    "imagePublisher": {
       "type": "string",
-      "defaultValue": "Subnet",
+      "defaultValue": "Canonical",
+      "allowedValues": [
+          "Canonical",
+          "OpenLogic"
+      ],
       "metadata": {
-          "description": "Name of the subnet in the virtual network"
-      }
-    },
-    "networkSecurityGroupName": {
-      "type": "string",
-      "defaultValue": "SecGroupNet",
-      "metadata": {
-          "description": "Name of the Network Security Group"
+          "description": "The size of the VM"
       }
     },
     "adminUsername": {
@@ -61,6 +63,7 @@
         "description": "User name for the Virtual Machine."
       }
     },
+    
     "commandToExecute":{
       "type": "string",
       "defaultValue": "sudo apt-get update; sudo apt upgrade; time;"
@@ -88,21 +91,12 @@
     "vnetName": "[concat('vnet-',uniquestring(resourceGroup().id))]",
     "vmName": "[concat('vm-',parameters('vmNameSuffix'),'-',uniquestring(resourceGroup().id))]",
     "dnsLabelPrefix": "[concat('dns-',parameters('vmNameSuffix'),'-',uniquestring(resourceGroup().id))]",
-    "imagePublisher": "Canonical",
-    "imageOffer": "UbuntuServer",
     "nicName": "[concat('nic-int-',variables('vmName'),'-',uniquestring(resourceGroup().id))]",
     "pipName": "[concat('nic-pip-',variables('vmName'),'-',uniquestring(resourceGroup().id))]",
     "NSGName": "[concat('nsg-',uniquestring(resourceGroup().id))]",
     "subnetName": "default",
     "addressPrefix": "10.192.168.0/24",
     "subnetAddressPrefix": "10.192.168.0/26",
-    "vmOSstorageAccountName": "[concat('osdisk',uniquestring(resourceGroup().id))]",
-    "vmDatastorageAccountName": "[concat('datadisk',uniquestring(resourceGroup().id))]",
-    "vmStorageAccountType": "Standard_LRS",
-    "vmStorageAccountContainerName": "vhds",
-    "vmOSDiskName": "[concat('osdisk-',variables('vmName'),'-')]",
-    "vmDataDiskName": "[concat('datadisk-',variables('vmName'),'-')]",
-    "publicIPAddressType": "Dynamic",
     "osDiskType": "Standard_LRS",
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]"
   },
@@ -332,8 +326,8 @@
             }
           },
           "imageReference": {
-            "publisher": "[variables('imagePublisher')]",
-            "offer": "[variables('imageOffer')]",
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
             "sku": "[parameters('ubuntuOSVersion')]",
             "version": "latest"
           }
