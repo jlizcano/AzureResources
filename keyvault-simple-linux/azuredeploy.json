@@ -78,6 +78,14 @@
     "adUserId": {
       "type": "string",
       "defaultValue": null
+    },
+    "adminPassword": {
+      "reference": {
+          "keyVault": {
+          "id:": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.KeyVault/vaults/',variables('keyvaultName'))]"
+          },
+          "secretName": "vmAdminPassword"
+      }
     }
   },
   "variables": {
@@ -323,7 +331,8 @@
       "name": "[variables('vmName')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+        "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]",
+        "[resourceId('Microsoft.KeyVault/vaults/secrets/', concat(variables('keyVaultName'), '/', 'adminPasswd'))]"
       ],
       "properties": {
         "hardwareProfile": {
@@ -353,7 +362,7 @@
         "osProfile": {
           "computerName": "[variables('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[variables('passwd')]"
+          "adminPassword": "[parameters('adminPassword')]"
           //"linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
         }
       }
