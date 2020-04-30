@@ -1,0 +1,21 @@
+{
+    "$schema":  "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion":  "1.0.0.0",
+    "parameters":  {
+       "adminUsername":  {
+         "value":  "demouser"
+          },
+       "adminPassword":  {
+         "reference":  {
+            "keyVault":  {
+               "id:": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.KeyVault/vaults/',variables('keyvaultName'))]"
+	    },
+            "secretName":  "MySecret"
+         }
+       },
+       "adUserId":  {
+          "value":  "1bdcd495-bb99-4928-9d30-117ea3dda2f9"
+        }
+    }
+}
+
