@@ -346,22 +346,6 @@
           //"linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
         }
       }
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "apiVersion": "2015-06-15",
-      "name": "[concat(variables('vmName'),'/CustomScript')]",
-      "dependsOn": ["[resourceId('Microsoft.Compute/virtualMachines/', variables('vmName'))]"],
-      "location": "[parameters('location')]",
-      "properties": {
-        "publisher": "Microsoft.Azure.Extensions",
-        "type": "CustomScript",
-        "typeHandlerVersion": "2.0",
-        "autoUpgradeMinorVersion": true,
-        "protectedSettings": {
-          "commandToExecute": "[parameters('commandToExecute')]"
-        }
-      }
     }
   ],
   "outputs": {
