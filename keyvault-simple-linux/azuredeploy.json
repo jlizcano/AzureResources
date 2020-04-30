@@ -86,7 +86,7 @@
   "variables": {
     "keyvaultName": "[concat('keyvault','-',uniqueString(resourceGroup().id))]",
     "vnetName": "[concat('vnet-',uniquestring(resourceGroup().id))]",
-    "vmName": "[concat('vm-',parameters('vmNameSuffix'),uniquestring(resourceGroup().id))]",
+    "vmName": "[concat('vm-',parameters('vmNameSuffix'),'-',uniquestring(resourceGroup().id))]",
     "dnsLabelPrefix": "[concat('dns-',parameters('vmNameSuffix'),'-',uniquestring(resourceGroup().id))]",
     "imagePublisher": "Canonical",
     "imageOffer": "UbuntuServer",
@@ -318,7 +318,7 @@
       "location": "[parameters('location')]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]",
-        "[resourceId('Microsoft.KeyVault/vaults/secrets/', concat(variables('keyVaultName'), '/', 'adminPasswd'))]"
+        "[resourceId('Microsoft.KeyVault/vaults/secrets/', concat(variables('keyVaultName')))]"
       ],
       "properties": {
         "hardwareProfile": {
